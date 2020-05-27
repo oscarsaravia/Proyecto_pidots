@@ -12,6 +12,7 @@
 
 main:
 cont .req r5
+	ldr r10,=arreglo1
 
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
@@ -57,13 +58,13 @@ repite:
 	mov r11, #0
 	ldr r10,=arreglo1 
 	bl mysrand
-	mov cont,#4		@ Cantidad de numeros aleatorios
+	mov cont,#5		@ Cantidad de numeros aleatorios
 
 ciclo:	
 	bl myrand
 	push {r0}
 	mov r1,r0
-	and r1,r1,#1 @para que genere numeros entre 0 y 3
+	and r1,r1,#1 @para que genere numeros entre 0 y 1
 	ldr r0,=formato
 	bl printf
 	pop {r0}
@@ -87,10 +88,11 @@ pregunta2: .asciz "De que columna a que columna se encuentra la cadena"
 num:   .asciz "%d"
 opcion: 	.word 0
 temp:		.word 0
-arreglo1: .word 0, 0, 0, 0
-arreglo2: .word 0, 0, 0, 0
-arreglo3: .word 0, 0, 0, 0
-arreglo4: .word 0, 0, 0, 0
+arreglo1: .word 0, 0, 0, 0, 0
+arreglo2: .word 0, 0, 0, 0, 0
+arreglo3: .word 0, 0, 0, 0, 0
+arreglo4: .word 0, 0, 0, 0, 0
+arreglo5: .word 0, 0, 0, 0, 0
 
 titulo:
 	.asciz " /$$$$$$$  /$$       /$$$$$$$              /$$             
