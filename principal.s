@@ -9,11 +9,11 @@
  .align 2
  .global main
  .func main
-
+ 
 main:
 cont .req r5
 	ldr r10,=arreglo1
-
+	mov r7, #5
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
 	
@@ -29,6 +29,8 @@ cont .req r5
 	ldr r1,=opcion
 	ldr r1,[r1]
 	
+
+
 	cmp r1, #1
 	beq opcion1
 	cmp r1, #2
@@ -41,6 +43,7 @@ opcion1:
 	ldr r0,=num
 	ldr r1,=opcion
 	bl scanf
+
 
 	b repite
 opcion2: 
@@ -56,7 +59,6 @@ opcion2:
 repite:	
 	mov r0,sp
 	mov r11, #0
-	ldr r10,=arreglo1 
 	bl mysrand
 	mov cont,#5		@ Cantidad de numeros aleatorios
 
@@ -65,11 +67,34 @@ ciclo:
 	push {r0}
 	mov r1,r0
 	and r1,r1,#1 @para que genere numeros entre 0 y 1
+	
+	ldr r1,[r1] 	@en r1 está el valor leido
+	str r1,[r10],#4 @r10 apunta al vector "a"
+	
 	ldr r0,=formato
 	bl printf
+	
 	pop {r0}
+	
 	subs cont, cont, #1
 	bne ciclo
+																 
+ciclo1:
+	ldr r10,=arreglo1
+    ldr r1,[r10]            @leo el elemento
+    ldr r0,=formato
+    bl printf            @muestro el elemento
+    add r10,r10,#4        @paso al siguiente elemento
+    sub r7,r7,#1        @disminuyo contador
+    bne ciclo1            @sino es 0 repetir el ciclo
+
+
+	
+
+	
+	
+	
+
 
 
 
@@ -93,7 +118,6 @@ arreglo2: .word 0, 0, 0, 0, 0
 arreglo3: .word 0, 0, 0, 0, 0
 arreglo4: .word 0, 0, 0, 0, 0
 arreglo5: .word 0, 0, 0, 0, 0
-
 titulo:
 	.asciz " /$$$$$$$  /$$       /$$$$$$$              /$$             
 | $$__  $$|__/      | $$__  $$            | $$             
