@@ -60,16 +60,71 @@ opcion2:
 
 	bl aleatorios
 	str r0,[r10] @r10 apunta al vector "a"
-	
 
-													 
 ciclo1:
-    ldr r1,[r10]    @valor de datos para imprimir
+   ldr r1,[r10]    @valor de datos para imprimir
     ldr r0,=formato
     bl printf
     add r10,#4    @ste
     subs r7,#1    @contador
     bne ciclo1    @si no es 0 regresa   @Impresion datos
+
+printarreglos:
+	@ Print arreglo 1
+	mov r11,#0
+	ldr r8,=arreglo1
+	printarreglo1:
+		ldr r1,[r8],#4
+		add r11, r11,#1
+		ldr r0,= noenter
+		bl printf
+		cmp r11,#5
+		bne printarreglo1
+
+	@ Print arreglo 2
+	mov r11,#0
+	ldr r8,=arreglo2
+	printarreglo2:
+		ldr r1,[r8],#4
+		add r11, r11,#1
+		ldr r0,= noenter
+		bl printf
+		cmp r11,#5
+		bne printarreglo2
+
+	@ Print arreglo 3
+	mov r11,#0
+	ldr r8,=arreglo3
+	printarreglo3:
+		ldr r1,[r8],#4
+		add r11, r11,#1
+		ldr r0,= noenter
+		bl printf
+		cmp r11,#5
+		bne printarreglo3
+
+	@ Print arreglo 4
+	mov r11,#0
+	ldr r8,=arreglo4
+	printarreglo4:
+		ldr r1,[r8],#4
+		add r11, r11,#1
+		ldr r0,= noenter
+		bl printf
+		cmp r11,#5
+		bne printarreglo4
+
+	@ Print arreglo 5
+	mov r11,#0
+	ldr r8,=arreglo5
+	printarreglo5:
+		ldr r1,[r8],#4
+		add r11, r11,#1
+		ldr r0,= noenter
+		bl printf
+		cmp r11,#5
+		bne printarreglo5
+
 
 	
 .unreq	cont
@@ -79,6 +134,7 @@ ciclo1:
 .data
 .align 2
 formato: .asciz "%d\n"
+noenter: .asciz "%d\n"
 mascara: .word 0xF
 inicio:  .asciz "\nBienvenido al juego PiDots!"
 inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
@@ -88,10 +144,10 @@ num:   .asciz "%d"
 opcion: 	.word 0
 temp:		.word 0
 arreglo1: .word 1, 2, 3, 4, 5
-arreglo2: .word 0, 0, 0, 0, 0
-arreglo3: .word 0, 0, 0, 0, 0
-arreglo4: .word 0, 0, 0, 0, 0
-arreglo5: .word 0, 0, 0, 0, 0
+arreglo2: .word 6, 7, 8, 9, 10
+arreglo3: .word 11, 12, 13, 14, 15
+arreglo4: .word 16, 17, 18, 19, 20
+arreglo5: .word 21, 22, 23, 24, 25
 titulo:
 	.asciz " /$$$$$$$  /$$       /$$$$$$$              /$$             
 | $$__  $$|__/      | $$__  $$            | $$             
