@@ -13,14 +13,200 @@
 main:
 
 	cont .req r5
-	ldr r10,=arreglo1
-	mov r7, #5
-	mov r9, #4
+	mov r5, #5
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
 	
 	ldr r0,=inicio		@Mensaje de Bienvenida
 	bl puts
+	/*************************************/
+	/*        Inicio del tablero         */
+	/*************************************/
+	ldr r10,=arreglo1
+	add r10, r10, #12	
+tablero: 
+	/*********************/
+	/*		 Fila 1	   	 */
+	/*********************/
+
+	arregloA:
+		bl aleatorios
+		cmp r0, #100
+		movgt r0, #1
+		movlt r0, #0
+		str r0, [r10]
+		sub r10, r10,#4 			@ Regresar 4 bytes
+		subs r5,r5,#1
+		bne arregloA
+
+	/*********************/
+	/*		 Fila 2	   	 */
+	/*********************/	
+
+	ldr r10,=arreglo2
+	add r10, r10, #12
+	mov r5, #5
+
+	arregloB:
+		bl aleatorios
+		cmp r0, #100
+		movgt r0, #1
+		movlt r0, #0
+		str r0, [r10]
+		sub r10, r10,#4 			@ Regresar 4 bytes
+		subs r5,r5,#1
+		bne arregloB
+
+	/*********************/
+	/*		 Fila 3	   	 */
+	/*********************/	
+
+	ldr r10,=arreglo3
+	add r10, r10, #12
+	mov r5, #5
+
+	arregloC:
+		bl aleatorios
+		cmp r0, #100
+		movgt r0, #1
+		movlt r0, #0
+		str r0, [r10]
+		sub r10, r10,#4 			@ Regresar 4 bytes
+		subs r5,r5,#1
+		bne arregloC
+
+	/*********************/
+	/*		 Fila 4	   	 */
+	/*********************/	
+
+	ldr r10,=arreglo4
+	add r10, r10, #12
+	mov r5, #5
+
+	arregloD:
+		bl aleatorios
+		cmp r0, #100
+		movgt r0, #1
+		movlt r0, #0
+		str r0, [r10]
+		sub r10, r10,#4 			@ Regresar 4 bytes
+		subs r5,r5,#1
+		bne arregloD
+
+	/*********************/
+	/*		 Fila 5	   	 */
+	/*********************/	
+
+	ldr r10,=arreglo5
+	add r10, r10, #12
+	mov r5, #5
+
+	arregloE:
+		bl aleatorios
+		cmp r0, #100
+		movgt r0, #1
+		movlt r0, #0
+		str r0, [r10]
+		sub r10, r10,#4 			@ Regresar 4 bytes
+		subs r5,r5,#1
+		bne arregloE
+
+	/*************************************/
+	/*		 Para imprimir tablero	   	 */
+	/*************************************/
+impTablero: 
+	/*********************/
+	/*		 Fila 1	   	 */
+	/*********************/	
+
+	ldr r4,=arreglo1
+	add r4, r4, #12 @mover al final
+	mov r5,#5 @contador del vector
+	ciclo1:
+		ldr r1,[r4]    @valor de datos para imprimir
+		ldr r0,=formato
+		bl printf
+		sub r4, r4, #4 @mover 4 byte
+		subs r5,r5,#1
+		bne ciclo1
+	ldr r0,=formato2
+	bl printf
+
+	/*********************/
+	/*		 Fila 2	   	 */
+	/*********************/	
+
+	ldr r4,=arreglo2
+	add r4, r4, #12 @mover al final
+	mov r5,#5 @contador del vector
+	ciclo2:
+		ldr r1,[r4]    @valor de datos para imprimir
+		ldr r0,=formato
+		bl printf
+		sub r4, r4, #4 @mover 4 byte
+		subs r5,r5,#1
+		bne ciclo2
+	ldr r0,=formato2
+	bl printf
+
+	/*********************/
+	/*		 Fila 3	   	 */
+	/*********************/	
+
+	ldr r4,=arreglo3
+	add r4, r4, #12 @mover al final
+	mov r5,#5 @contador del vector
+	ciclo3:
+		ldr r1,[r4]    @valor de datos para imprimir
+		ldr r0,=formato
+		bl printf
+		sub r4, r4, #4 @mover 4 byte
+		subs r5,r5,#1
+		bne ciclo3
+
+	ldr r0,=formato2
+	bl printf
+	
+	/*********************/
+	/*		 Fila 4	   	 */
+	/*********************/	
+
+	ldr r4,=arreglo4
+	add r4, r4, #12 @mover al final
+	mov r5,#5 @contador del vector
+	ciclo4:
+		ldr r1,[r4]    @valor de datos para imprimir
+		ldr r0,=formato
+		bl printf
+		sub r4, r4, #4 @mover 4 byte
+		subs r5,r5,#1
+		bne ciclo4
+	ldr r0,=formato2
+	bl printf
+	
+	/*********************/
+	/*		 Fila 5	   	 */
+	/*********************/	
+
+	ldr r4,=arreglo5
+	add r4, r4, #12 @mover al final
+	mov r5,#5 @contador del vector
+	ciclo5:
+		ldr r1,[r4]    @valor de datos para imprimir
+		ldr r0,=formato
+		bl printf
+		sub r4, r4, #4 @mover 4 byte
+		subs r5,r5,#1
+		bne ciclo5
+
+	ldr r0,=formato2
+	bl printf
+
+
+
+	/*************************************/
+	/*Inicio de las preguntas y del juego*/
+	/*************************************/
 
 	ldr r0,=inicio2		@Preguntas
 	bl puts
@@ -46,10 +232,7 @@ opcion1:
 	ldr r1,=opcion
 	bl scanf
 
-
-	bl aleatorios
-	str r0,[r10] @r10 apunta al vector "a"
-
+	b impTablero
 opcion2: 
 	ldr r0,=pregunta2		@Preguntas
 	bl puts
@@ -57,74 +240,10 @@ opcion2:
 	ldr r0,=num
 	ldr r1,=opcion
 	bl scanf
+	b impTablero
+	
 
-	bl aleatorios
-	str r0,[r10] @r10 apunta al vector "a"
-
-ciclo1:
-   ldr r1,[r10]    @valor de datos para imprimir
-    ldr r0,=formato
-    bl printf
-    add r10,#4    @ste
-    subs r7,#1    @contador
-    bne ciclo1    @si no es 0 regresa   @Impresion datos
-
-printarreglos:
-	@ Print arreglo 1
-	mov r11,#0
-	ldr r8,=arreglo1
-	printarreglo1:
-		ldr r1,[r8],#4
-		add r11, r11,#1
-		ldr r0,= noenter
-		bl printf
-		cmp r11,#5
-		bne printarreglo1
-
-	@ Print arreglo 2
-	mov r11,#0
-	ldr r8,=arreglo2
-	printarreglo2:
-		ldr r1,[r8],#4
-		add r11, r11,#1
-		ldr r0,= noenter
-		bl printf
-		cmp r11,#5
-		bne printarreglo2
-
-	@ Print arreglo 3
-	mov r11,#0
-	ldr r8,=arreglo3
-	printarreglo3:
-		ldr r1,[r8],#4
-		add r11, r11,#1
-		ldr r0,= noenter
-		bl printf
-		cmp r11,#5
-		bne printarreglo3
-
-	@ Print arreglo 4
-	mov r11,#0
-	ldr r8,=arreglo4
-	printarreglo4:
-		ldr r1,[r8],#4
-		add r11, r11,#1
-		ldr r0,= noenter
-		bl printf
-		cmp r11,#5
-		bne printarreglo4
-
-	@ Print arreglo 5
-	mov r11,#0
-	ldr r8,=arreglo5
-	printarreglo5:
-		ldr r1,[r8],#4
-		add r11, r11,#1
-		ldr r0,= noenter
-		bl printf
-		cmp r11,#5
-		bne printarreglo5
-
+													 
 
 	
 .unreq	cont
@@ -133,8 +252,8 @@ printarreglos:
 	
 .data
 .align 2
-formato: .asciz "%d\n"
-noenter: .asciz "%d\n"
+formato: .asciz "  %d"
+formato2: .asciz "\n"
 mascara: .word 0xF
 inicio:  .asciz "\nBienvenido al juego PiDots!"
 inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
@@ -144,10 +263,10 @@ num:   .asciz "%d"
 opcion: 	.word 0
 temp:		.word 0
 arreglo1: .word 1, 2, 3, 4, 5
-arreglo2: .word 6, 7, 8, 9, 10
-arreglo3: .word 11, 12, 13, 14, 15
-arreglo4: .word 16, 17, 18, 19, 20
-arreglo5: .word 21, 22, 23, 24, 25
+arreglo2: .word 0, 0, 0, 0, 0
+arreglo3: .word 0, 0, 0, 0, 0
+arreglo4: .word 0, 0, 0, 0, 0
+arreglo5: .word 0, 0, 0, 0, 0
 titulo:
 	.asciz " /$$$$$$$  /$$       /$$$$$$$              /$$             
 | $$__  $$|__/      | $$__  $$            | $$             
