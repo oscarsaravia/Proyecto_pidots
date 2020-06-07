@@ -14,7 +14,8 @@ main:
 
 	cont .req r5
 	mov r5, #5
-	mov r11, #0	@Puntuación -> no tocar
+	mov r11, #0	@Puntuación -> NO tocar
+	@mov r13, #0 @Puntos unidos -> NO tocar
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
 	
@@ -328,12 +329,12 @@ cadenaenfila:
 		add r4, r4, #12
 		ldr r1,=iniciocadena
 		ldr r1,[r1]
+
 		@Sumar a contador
 		mov r6, #0
 		sub r6, r0, r1
 		add r6, #1
 		add r11, r11, r6
-
 		sub r1, r1, #1
 		ldr r0,=finalcadena
 		ldr r0, [r0]
@@ -390,6 +391,7 @@ cadenaenfila:
 		add r4, r4, #12
 		ldr r1,=iniciocadena
 		ldr r1,[r1]
+
 		@Sumar a contador
 		mov r6, #0
 		sub r6, r0, r1
@@ -601,15 +603,15 @@ cadenaencolumna:
 		ldr r8,=ubicacion
 		ldr r8, [r8]
 		sub r8, r8, #1
-		cmp r8, #0
+		cmp r0, #1
 		beq arr1
-		cmp r8, #1
+		cmp r0, #2
 		beq arr2
-		cmp r8, #2
+		cmp r0, #3
 		beq arr3
-		cmp r8, #3
+		cmp r0, #4
 		beq arr4
-		cmp r8, #4
+		cmp r0, #5
 		beq arr5
 		arr1:
 			ldr r4,=arreglo1
@@ -618,6 +620,7 @@ cadenaencolumna:
 			mul r6, r6, r8
 			sub r4, r4, r6
 			ldr r9, [r4]
+			b verificacion
 		arr2:
 			ldr r4,=arreglo2
 			add r4, r4, #12
@@ -625,6 +628,7 @@ cadenaencolumna:
 			mul r6, r6, r8
 			sub r4, r4, r6
 			ldr r9, [r4]
+			b verificacion
 		arr3:
 			ldr r4,=arreglo3
 			add r4, r4, #12
@@ -632,6 +636,7 @@ cadenaencolumna:
 			mul r6, r6, r8
 			sub r4, r4, r6
 			ldr r9, [r4]
+			b verificacion
 		arr4:
 			ldr r4,=arreglo4
 			add r4, r4, #12
@@ -639,6 +644,7 @@ cadenaencolumna:
 			mul r6, r6, r8
 			sub r4, r4, r6
 			ldr r9, [r4]
+			b verificacion
 		arr5:
 			ldr r4,=arreglo5
 			add r4, r4, #12
@@ -646,7 +652,11 @@ cadenaencolumna:
 			mul r6, r6, r8
 			sub r4, r4, r6
 			ldr r9, [r4]
+			b verificacion
 	verificacion:
+		ldr r8,=ubicacion
+		ldr r8, [r8]
+		sub r8, r8, #1
 		cmp r0, r1
 		beq llenar
 		cmp r0, #1
@@ -727,6 +737,10 @@ cadenaencolumna:
 		ldr r1,=finalcadena
 		ldr r1, [r1]
 		add r1, r1, #1
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r1, r0
+		add r11, r11, r6
 		ldr r8,=ubicacion
 		ldr r8, [r8]
 		sub r8, r8, #1
@@ -833,6 +847,7 @@ formato2: .asciz "\n"
 inicio:  .asciz "\nBienvenido al juego PiDots!"
 inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
 puntuacion: .asciz "Puntuacion: %d\n"
+unidos:	.asciz "Caracteres unidos: %d\n"
 merror:	.asciz "La cadena ingresada no es valida, se te restan 3 puntos"
 win:	.asciz "FELICIDADES, has completado el juego"
 num:   .asciz " %d"
@@ -853,6 +868,7 @@ finalcadena:	.word 0
 opcion:	.word 0
 ubicacion:	.word 0
 temp:		.word 0
+varpuntos:	.word 22
 arreglo1: .word 1, 2, 3, 4, 5
 arreglo2: .word 0, 0, 0, 0, 0
 arreglo3: .word 0, 0, 0, 0, 0
