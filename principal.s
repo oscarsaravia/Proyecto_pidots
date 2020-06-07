@@ -14,6 +14,7 @@ main:
 
 	cont .req r5
 	mov r5, #5
+	mov r11, #0	@Puntuación -> no tocar
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
 	
@@ -23,7 +24,8 @@ main:
 	/*        Inicio del tablero         */
 	/*************************************/
 	ldr r10,=arreglo1
-	add r10, r10, #12	
+	add r10, r10, #12
+
 tablero: 
 	/*********************/
 	/*		 Fila 1	   	 */
@@ -33,7 +35,7 @@ tablero:
 		bl aleatorios
 		cmp r0, #100
 		movgt r0, #1
-		movlt r0, #0
+		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
 		subs r5,r5,#1
@@ -51,7 +53,7 @@ tablero:
 		bl aleatorios
 		cmp r0, #100
 		movgt r0, #1
-		movlt r0, #0
+		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
 		subs r5,r5,#1
@@ -69,7 +71,7 @@ tablero:
 		bl aleatorios
 		cmp r0, #100
 		movgt r0, #1
-		movlt r0, #0
+		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
 		subs r5,r5,#1
@@ -87,7 +89,7 @@ tablero:
 		bl aleatorios
 		cmp r0, #100
 		movgt r0, #1
-		movlt r0, #0
+		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
 		subs r5,r5,#1
@@ -105,7 +107,7 @@ tablero:
 		bl aleatorios
 		cmp r0, #100
 		movgt r0, #1
-		movlt r0, #0
+		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
 		subs r5,r5,#1
@@ -114,7 +116,13 @@ tablero:
 	/*************************************/
 	/*		 Para imprimir tablero	   	 */
 	/*************************************/
+
 impTablero: 
+
+	ldr r0,=puntuacion
+	mov r1, r11
+	bl printf
+
 	/*********************/
 	/*		 Fila 1	   	 */
 	/*********************/	
@@ -225,23 +233,589 @@ impTablero:
 	beq opcion2
 	
 opcion1: 
-	ldr r0,=pregunta1		@Preguntas
+
+	ldr r0,=numerofila
 	bl puts
 
 	ldr r0,=num
-	ldr r1,=opcion
+	ldr r1,=ubicacion
 	bl scanf
 
-	b impTablero
+	ldr r0,=pregunta2a		@Preguntas
+	bl puts
+	ldr r0,=num
+	ldr r1,=iniciocadena
+	bl scanf
+
+	ldr r0,= pregunta2b
+	bl puts
+	ldr r0,=num
+	ldr r1,=finalcadena
+	bl scanf
+
+	b cadenaenfila
+
+
 opcion2: 
-	ldr r0,=pregunta2		@Preguntas
+
+	ldr r0,=numerocolumna
+	bl puts
+	ldr r0,=num
+	ldr r1,=ubicacion
+	bl scanf
+
+	ldr r0,=pregunta1a		@Preguntas
+	bl puts
+	ldr r0,=num
+	ldr r1,=iniciocadena
+	bl scanf
+
+	ldr r0,= pregunta1b
+	bl puts
+	ldr r0,=num
+	ldr r1,=finalcadena
+	bl scanf
+
+	b cadenaencolumna
+
+
+cadenaenfila:
+
+	ldr r1,=ubicacion
+	ldr r1,[r1]
+
+	cmp r1, #1
+	beq fila1
+	cmp r1, #2
+	beq fila2
+	cmp r1, #3
+	beq fila3
+	cmp r1, #4
+	beq fila4
+	cmp r1, #5
+	beq fila5
+
+	fila1:
+
+		ldr r4,=arreglo1
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0,[r0]
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+
+		revisar:
+			ldr r7, [r4]
+			add r1, r1, #1
+			cmp r7, #0
+			beq error
+			rep1:
+				sub r4, r4, #4
+				ldr r8,[r4]
+				cmp r8, #0
+				beq error
+				cmp r7, r8
+				bne error
+				add r1, r1, #1
+				cmp r1, r0
+				bne rep1
+
+		ldr r4,=arreglo1
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r0, r1
+		add r6, #1
+		add r11, r11, r6
+
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0, [r0]
+
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+		mov r12, #0
+		str r12, [r4]
+		add r1, r1, #1
+		mov r9, #4
+
+		repetir1:
+			sub r4, r4, r9
+			str r12, [r4]
+			add r1, r1, #1
+			cmp r1, r0
+			bne repetir1
+
+		b impTablero
+
+
+
+
+	fila2:
+		ldr r4,=arreglo2
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0,[r0]
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+
+		revisar2:
+			ldr r7, [r4]
+			add r1, r1, #1
+			cmp r7, #0
+			beq error
+			rep2:
+				sub r4, r4, #4
+				ldr r8,[r4]
+				cmp r8, #0
+				beq error
+				cmp r7, r8
+				bne error
+				add r1, r1, #1
+				cmp r1, r0
+				bne rep2
+
+		ldr r4,=arreglo2
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r0, r1
+		add r6, #1
+		add r11, r11, r6
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0, [r0]
+
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+		mov r12, #0
+		str r12, [r4]
+		add r1, r1, #1
+		mov r9, #4
+
+		repetir2:
+			sub r4, r4, r9
+			str r12, [r4]
+			add r1, r1, #1
+			cmp r1, r0
+			bne repetir2
+
+		b impTablero
+
+	fila3:
+		ldr r4,=arreglo3
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0,[r0]
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+
+		revisar3:
+			ldr r7, [r4]
+			add r1, r1, #1
+			cmp r7, #0
+			beq error
+			rep3:
+				sub r4, r4, #4
+				ldr r8,[r4]
+				cmp r8, #0
+				beq error
+				cmp r7, r8
+				bne error
+				add r1, r1, #1
+				cmp r1, r0
+				bne rep3
+
+		ldr r4,=arreglo3
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r0, r1
+		add r6, #1
+		add r11, r11, r6
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0, [r0]
+
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+		mov r12, #0
+		str r12, [r4]
+		add r1, r1, #1
+		mov r9, #4
+
+		repetir3:
+			sub r4, r4, r9
+			str r12, [r4]
+			add r1, r1, #1
+			cmp r1, r0
+			bne repetir3
+
+		b impTablero
+
+	fila4:
+		ldr r4,=arreglo4
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0,[r0]
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+
+		revisar4:
+			ldr r7, [r4]
+			add r1, r1, #1
+			cmp r7, #0
+			beq error
+			rep4:
+				sub r4, r4, #4
+				ldr r8,[r4]
+				cmp r8, #0
+				beq error
+				cmp r7, r8
+				bne error
+				add r1, r1, #1
+				cmp r1, r0
+				bne rep4
+
+		ldr r4,=arreglo4
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r0, r1
+		add r6, #1
+		add r11, r11, r6
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0, [r0]
+
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+		mov r12, #0
+		str r12, [r4]
+		add r1, r1, #1
+		mov r9, #4
+
+		repetir4:
+			sub r4, r4, r9
+			str r12, [r4]
+			add r1, r1, #1
+			cmp r1, r0
+			bne repetir4
+
+		b impTablero
+
+	fila5:
+		ldr r4,=arreglo5
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0,[r0]
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+
+		revisar5:
+			ldr r7, [r4]
+			add r1, r1, #1
+			cmp r7, #0
+			beq error
+			rep5:
+				sub r4, r4, #4
+				ldr r8,[r4]
+				cmp r8, #0
+				beq error
+				cmp r7, r8
+				bne error
+				add r1, r1, #1
+				cmp r1, r0
+				bne rep5
+
+		ldr r4,=arreglo5
+		add r4, r4, #12
+		ldr r1,=iniciocadena
+		ldr r1,[r1]
+		@Sumar a contador
+		mov r6, #0
+		sub r6, r0, r1
+		add r6, #1
+		add r11, r11, r6
+		sub r1, r1, #1
+		ldr r0,=finalcadena
+		ldr r0, [r0]
+
+		mov r6, #4
+		mul r9, r6, r1
+		sub r4, r4, r9
+		mov r12, #0
+		str r12, [r4]
+		add r1, r1, #1
+		mov r9, #4
+
+		repetir5:
+			sub r4, r4, r9
+			str r12, [r4]
+			add r1, r1, #1
+			cmp r1, r0
+			bne repetir5
+
+		b impTablero
+
+cadenaencolumna:
+	revision:
+		mov r9, #0
+		ldr r0,=iniciocadena
+		ldr r0, [r0]
+		ldr r1,=finalcadena
+		ldr r1, [r1]
+		add r1, r1, #1
+		ldr r8,=ubicacion
+		ldr r8, [r8]
+		sub r8, r8, #1
+		cmp r8, #0
+		beq arr1
+		cmp r8, #1
+		beq arr2
+		cmp r8, #2
+		beq arr3
+		cmp r8, #3
+		beq arr4
+		cmp r8, #4
+		beq arr5
+		arr1:
+			ldr r4,=arreglo1
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r9, [r4]
+		arr2:
+			ldr r4,=arreglo2
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r9, [r4]
+		arr3:
+			ldr r4,=arreglo3
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r9, [r4]
+		arr4:
+			ldr r4,=arreglo4
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r9, [r4]
+		arr5:
+			ldr r4,=arreglo5
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r9, [r4]
+	verificacion:
+		cmp r0, r1
+		beq llenar
+		cmp r0, #1
+		beq v1
+		cmp r0, #2
+		beq v2
+		cmp r0, #3
+		beq v3
+		cmp r0, #4
+		beq v4
+		cmp r0, #5
+		beq v5
+
+		v1:
+			ldr r4,=arreglo1
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r10, [r4]
+			add r0, r0, #1
+			cmp r9, r10
+			bne error
+			cmp r9, r10
+			beq verificacion
+		v2:
+			ldr r4,=arreglo2
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r10, [r4]
+			add r0, r0, #1
+			cmp r9, r10
+			bne error
+			cmp r9, r10
+			beq verificacion
+		v3:
+			ldr r4,=arreglo3
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r10, [r4]
+			add r0, r0, #1
+			cmp r9, r10
+			bne error
+			cmp r9, r10
+			beq verificacion
+		v4:
+			ldr r4,=arreglo4
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r10, [r4]
+			add r0, r0, #1
+			cmp r9, r10
+			bne error
+			cmp r9, r10
+			beq verificacion
+		v5:
+			ldr r4,=arreglo5
+			add r4, r4, #12
+			mov r6, #4
+			mul r6, r6, r8
+			sub r4, r4, r6
+			ldr r10, [r4]
+			add r0, r0, #1
+			cmp r9, r10
+			bne error
+			cmp r9, r10
+			beq verificacion
+
+	llenar:
+		ldr r0,=iniciocadena
+		ldr r0, [r0]
+		ldr r1,=finalcadena
+		ldr r1, [r1]
+		add r1, r1, #1
+		ldr r8,=ubicacion
+		ldr r8, [r8]
+		sub r8, r8, #1
+
+		bucle:
+			cmp r0, r1
+			beq impTablero
+			cmp r0, #1
+			beq col1
+			cmp r0, #2
+			beq col2
+			cmp r0, #3
+			beq col3
+			cmp r0, #4
+			beq col4
+			cmp r0, #5
+			beq col5
+
+			col1:
+				ldr r4,=arreglo1
+				add r4, r4, #12
+				mov r6, #4
+				mul r6, r6, r8
+				sub r4, r4, r6
+				mov r12, #0
+				str r12, [r4]
+				add r0, r0, #1
+				b bucle
+
+
+			col2:
+				ldr r4,=arreglo2
+				add r4, r4, #12
+				mov r6, #4
+				mul r6, r6, r8
+				sub r4, r4, r6
+				mov r12, #0
+				str r12, [r4]
+				add r0, r0, #1
+				b bucle
+
+			col3:
+				ldr r4,=arreglo3
+				add r4, r4, #12
+				mov r6, #4
+				mul r6, r6, r8
+				sub r4, r4, r6
+				mov r12, #0
+				str r12, [r4]
+				add r0, r0, #1
+				b bucle
+
+			col4:
+				ldr r4,=arreglo4
+				add r4, r4, #12
+				mov r6, #4
+				mul r6, r6, r8
+				sub r4, r4, r6
+				mov r12, #0
+				str r12, [r4]
+				add r0, r0, #1
+				b bucle
+
+			col5:
+				ldr r4,=arreglo5
+				add r4, r4, #12
+				mov r6, #4
+				mul r6, r6, r8
+				sub r4, r4, r6
+				mov r12, #0
+				str r12, [r4]
+				add r0, r0, #1
+				b bucle
+
+ganador:
+	ldr r0,=win
 	bl puts
 
-	ldr r0,=num
-	ldr r1,=opcion
-	bl scanf
+error:
+	ldr r0,=merror
+	bl puts
+	sub r11, r11, #3
 	b impTablero
-	
+
+
+
+
+
+
 
 													 
 
@@ -252,21 +826,40 @@ opcion2:
 	
 .data
 .align 2
+
+@Mensajes y formatos
 formato: .asciz "  %d"
 formato2: .asciz "\n"
-mascara: .word 0xF
 inicio:  .asciz "\nBienvenido al juego PiDots!"
 inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
-pregunta1: .asciz "De que fila a  que fila se encuentra la cadena"
-pregunta2: .asciz "De que columna a que columna se encuentra la cadena"
-num:   .asciz "%d"
-opcion: 	.word 0
+puntuacion: .asciz "Puntuacion: %d\n"
+merror:	.asciz "La cadena ingresada no es valida, se te restan 3 puntos"
+win:	.asciz "FELICIDADES, has completado el juego"
+num:   .asciz " %d"
+menprueba:	.asciz "Prueba"
+
+
+@Preguntas para modificar los vectores
+numerocolumna: .asciz "En que columna se encuentra la cadena?"
+numerofila: .asciz "En que fila se encuentra la cadena?"
+pregunta1a: .asciz "En que fila inicia la cadena?"
+pregunta1b: .asciz "En que fila termina la cadena?"
+pregunta2a: .asciz "En que columna inicia la cadena?"
+pregunta2b: .asciz "En que columna termina la cadena?"
+
+@Variables
+iniciocadena: 	.word 0
+finalcadena:	.word 0
+opcion:	.word 0
+ubicacion:	.word 0
 temp:		.word 0
 arreglo1: .word 1, 2, 3, 4, 5
 arreglo2: .word 0, 0, 0, 0, 0
 arreglo3: .word 0, 0, 0, 0, 0
 arreglo4: .word 0, 0, 0, 0, 0
 arreglo5: .word 0, 0, 0, 0, 0
+
+@AsciiArt
 titulo:
 	.asciz " /$$$$$$$  /$$       /$$$$$$$              /$$             
 | $$__  $$|__/      | $$__  $$            | $$             
