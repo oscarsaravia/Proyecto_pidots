@@ -246,6 +246,7 @@ impTablero:
 	bge rangof
 	bne errorIng
 
+@Opcion de cadena en fila
 opcion1: 
 
 	ldr r0,=numerofila
@@ -268,7 +269,7 @@ opcion1:
 
 	b cadenaenfila
 
-
+@Opcion de cadena en columna 
 opcion2: 
 
 	ldr r0,=numerocolumna
@@ -291,8 +292,9 @@ opcion2:
 
 	b cadenaencolumna
 
-
+@establece la ubicacion del inicio de la cadena
 cadenaenfila:
+	@Hecho por Oscar Saravia 
 
 	ldr r1,=ubicacion
 	ldr r1,[r1]
@@ -310,6 +312,7 @@ cadenaenfila:
 	bge rangof
 	bne errorIng
 
+	@Progra defensiva para comparar que cadena solo tenga el mismo tipo de caracter
 	fila1:
 
 		ldr r4,=arreglo1
@@ -607,6 +610,8 @@ cadenaenfila:
 		b impTablero
 
 cadenaencolumna:
+	@Hecho por Diego Alvarez
+	@Verificación que cadena sea válida
 	revision:
 		mov r9, #0
 		ldr r0,=iniciocadena
@@ -669,6 +674,7 @@ cadenaencolumna:
 			sub r4, r4, r6
 			ldr r9, [r4]
 			b verificacion
+	@Verificacion que cadena sea correcta
 	verificacion:
 		ldr r8,=ubicacion
 		ldr r8, [r8]
@@ -747,6 +753,7 @@ cadenaencolumna:
 			cmp r9, r10
 			beq verificacion
 
+	@Llena con ceros la cadena ingresada por el usuario
 	llenar:
 		ldr r0,=iniciocadena
 		ldr r0, [r0]
@@ -831,10 +838,7 @@ cadenaencolumna:
 				add r0, r0, #1
 				b bucle
 
-ganador:
-	ldr r0,=win
-	bl puts
-
+@Muestra mensaje de error si la cadena es incorrecta
 error:
 	ldr r0,=merror
 	bl puts
@@ -883,7 +887,6 @@ puntuacion: .asciz "Puntuacion: %d\n"
 puntuacionG: .asciz "Puntuacion General: %d\n"
 unidos:	.asciz "Caracteres unidos: %d\n"
 merror:	.asciz "La cadena ingresada no es valida, se te restan 3 puntos"
-win:	.asciz "FELICIDADES, has completado el juego"
 num:   .asciz " %d"
 menprueba:	.asciz "Prueba"
 
