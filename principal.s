@@ -13,25 +13,29 @@
 main:
 
 	cont .req r5
-	mov r5, #5
-	mov r11, #0	@Puntuación -> NO tocar
-	@mov r13, #0 @Puntos unidos -> NO tocar
+	mov r11, #0	@Puntuación -> NO tocar, a mi no me hables asi mano
 	ldr r0,=titulo	@Print de titulo en asciiart
 	bl puts
-	
+	mov r6, #0
 	ldr r0,=inicio		@Mensaje de Bienvenida
 	bl puts
 	/*************************************/
 	/*        Inicio del tablero         */
 	/*************************************/
-	ldr r10,=arreglo1
-	add r10, r10, #12
-
+	
 tablero: 
 	/*********************/
 	/*		 Fila 1	   	 */
 	/*********************/
+	ldr r0,=nueva		@Preguntas
+	bl puts
+	
+	
+	mov r11, #0
 
+	ldr r10,=arreglo1
+	add r10, r10, #12
+	mov r5, #5
 	arregloA:
 		bl aleatorios
 		cmp r0, #100
@@ -119,10 +123,26 @@ tablero:
 	/*************************************/
 
 impTablero: 
+	/* R12 seria el valor de la puntuacion general, r11 de los puntos actuales de los niveles, y r6 donde se almacena la suma */
+	ldr r12, =variable	
+	ldr r12,[r12]
+	add r6, r12, r11
+	ldr r12, =variable
+	str r6,[r12]
 
+	ldr r0,=puntuacionG
+	mov r1, r6
+	bl printf
+
+
+	cmp r11, #15
+	bge tablero
+	
 	ldr r0,=puntuacion
 	mov r1, r11
 	bl printf
+	
+
 
 	/*********************/
 	/*		 Fila 1	   	 */
@@ -842,11 +862,13 @@ error:
 .align 2
 
 @Mensajes y formatos
+nueva: .asciz "$$$$ NUEVA RONDA $$$$"
 formato: .asciz "  %d"
 formato2: .asciz "\n"
 inicio:  .asciz "\nBienvenido al juego PiDots!"
 inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
 puntuacion: .asciz "Puntuacion: %d\n"
+puntuacionG: .asciz "Puntuacion General: %d\n"
 unidos:	.asciz "Caracteres unidos: %d\n"
 merror:	.asciz "La cadena ingresada no es valida, se te restan 3 puntos"
 win:	.asciz "FELICIDADES, has completado el juego"
@@ -863,6 +885,7 @@ pregunta2a: .asciz "En que columna inicia la cadena?"
 pregunta2b: .asciz "En que columna termina la cadena?"
 
 @Variables
+variable:    .word 0
 iniciocadena: 	.word 0
 finalcadena:	.word 0
 opcion:	.word 0
