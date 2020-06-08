@@ -123,20 +123,8 @@ tablero:
 	/*************************************/
 
 impTablero: 
-	/* R12 seria el valor de la puntuacion general, r11 de los puntos actuales de los niveles, y r6 donde se almacena la suma */
-	@ldr r12, =variable	
-	@ldr r12,[r12]
-	@add r6, r12, r11
-	@ldr r12, =variable
-	@str r6,[r12]
 
-	@ldr r0,=puntuacionG
-	@mov r1, r6
-	@bl printf
-	
-	cmp r11, #15
-	bge tablero
-	
+
 	ldr r0,=puntuacion
 	mov r1, r11
 	bl printf
@@ -251,6 +239,10 @@ impTablero:
 	cmp r1, #2
 	beq opcion2
 	cmp r1, #3
+	beq tablero
+	cmp r1, #4
+	beq exit
+	cmp r1, #5
 	bge rangof
 	bne errorIng
 
@@ -846,6 +838,7 @@ ganador:
 error:
 	ldr r0,=merror
 	bl puts
+
 	sub r11, r11, #3
 	b impTablero
 rangof:
@@ -861,11 +854,17 @@ errorIng:
 
 
 
+exit:
+	ldr r0,=win
+	bl puts
+	.unreq	cont
+	mov r7,#1
+	swi 0
 
 													 
 
 	
-.unreq	cont
+
 	mov r7,#1
 	swi 0
 	
@@ -879,7 +878,7 @@ out: .asciz "      CUIDADO: Opcion fuera de rango! "
 formato: .asciz "  %d"
 formato2: .asciz "\n"
 inicio:  .asciz "\nBienvenido al juego PiDots!"
-inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna"
+inicio2: .asciz "¿Los caracteres a unir se encuentran en una fila o en una columna? \n 1. Fila \n 2. Columna \n 3. Generar nuevo tablero \n 4. Salir"
 puntuacion: .asciz "Puntuacion: %d\n"
 puntuacionG: .asciz "Puntuacion General: %d\n"
 unidos:	.asciz "Caracteres unidos: %d\n"
