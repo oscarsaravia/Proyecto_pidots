@@ -40,13 +40,20 @@ Read:
 .balign 4
 format:
     .asciz "%3d\n"
-
+error : .asciz "      CUIDADO: Opcion fuera de rango! "
 @----------------------------------
 
 .text
 
-.global aleatorios
+.global rangoOut
+rangoOut:
+    push {lr}
+    ldr r0, =error
+    bl puts
+    pop {lr}
+    mov pc,lr
 
+.global aleatorios
 aleatorios:
 
 @    push   {r4, r5, r7, lr}     folowing AAPCS

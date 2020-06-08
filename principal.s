@@ -39,7 +39,7 @@ tablero:
 	arregloA:
 		bl aleatorios
 		cmp r0, #100
-		movgt r0, #1
+		movge r0, #1
 		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
@@ -57,7 +57,7 @@ tablero:
 	arregloB:
 		bl aleatorios
 		cmp r0, #100
-		movgt r0, #1
+		movge r0, #1
 		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
@@ -75,7 +75,7 @@ tablero:
 	arregloC:
 		bl aleatorios
 		cmp r0, #100
-		movgt r0, #1
+		movge r0, #1
 		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
@@ -93,7 +93,7 @@ tablero:
 	arregloD:
 		bl aleatorios
 		cmp r0, #100
-		movgt r0, #1
+		movge r0, #1
 		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
@@ -111,7 +111,7 @@ tablero:
 	arregloE:
 		bl aleatorios
 		cmp r0, #100
-		movgt r0, #1
+		movge r0, #1
 		movlt r0, #2
 		str r0, [r10]
 		sub r10, r10,#4 			@ Regresar 4 bytes
@@ -124,17 +124,16 @@ tablero:
 
 impTablero: 
 	/* R12 seria el valor de la puntuacion general, r11 de los puntos actuales de los niveles, y r6 donde se almacena la suma */
-	ldr r12, =variable	
-	ldr r12,[r12]
-	add r6, r12, r11
-	ldr r12, =variable
-	str r6,[r12]
+	@ldr r12, =variable	
+	@ldr r12,[r12]
+	@add r6, r12, r11
+	@ldr r12, =variable
+	@str r6,[r12]
 
-	ldr r0,=puntuacionG
-	mov r1, r6
-	bl printf
-
-
+	@ldr r0,=puntuacionG
+	@mov r1, r6
+	@bl printf
+	
 	cmp r11, #15
 	bge tablero
 	
@@ -245,14 +244,16 @@ impTablero:
 	bl scanf
 	ldr r1,=opcion
 	ldr r1,[r1]
-	
 
 
 	cmp r1, #1
 	beq opcion1
 	cmp r1, #2
 	beq opcion2
-	
+	cmp r1, #3
+	bge rangof
+	bne errorIng
+
 opcion1: 
 
 	ldr r0,=numerofila
@@ -261,7 +262,6 @@ opcion1:
 	ldr r0,=num
 	ldr r1,=ubicacion
 	bl scanf
-
 	ldr r0,=pregunta2a		@Preguntas
 	bl puts
 	ldr r0,=num
@@ -315,6 +315,8 @@ cadenaenfila:
 	beq fila4
 	cmp r1, #5
 	beq fila5
+	bge rangof
+	bne errorIng
 
 	fila1:
 
@@ -633,6 +635,8 @@ cadenaencolumna:
 		beq arr4
 		cmp r0, #5
 		beq arr5
+		bge rangof
+		bne errorIng
 		arr1:
 			ldr r4,=arreglo1
 			add r4, r4, #12
@@ -844,8 +848,15 @@ error:
 	bl puts
 	sub r11, r11, #3
 	b impTablero
-
-
+rangof:
+	ldr r0,=out
+	bl puts
+	b impTablero
+errorIng: 
+	ldr r0,=mal
+	bl puts
+	bl getchar
+	b impTablero
 
 
 
@@ -862,7 +873,9 @@ error:
 .align 2
 
 @Mensajes y formatos
+mal:   .asciz	"Error, el dato ingresado es incorrecto. Intente nuevamente.\n"
 nueva: .asciz "$$$$ NUEVA RONDA $$$$"
+out: .asciz "      CUIDADO: Opcion fuera de rango! "
 formato: .asciz "  %d"
 formato2: .asciz "\n"
 inicio:  .asciz "\nBienvenido al juego PiDots!"
@@ -892,7 +905,7 @@ opcion:	.word 0
 ubicacion:	.word 0
 temp:		.word 0
 varpuntos:	.word 22
-arreglo1: .word 1, 2, 3, 4, 5
+arreglo1: .word 0, 0, 0, 0, 0
 arreglo2: .word 0, 0, 0, 0, 0
 arreglo3: .word 0, 0, 0, 0, 0
 arreglo4: .word 0, 0, 0, 0, 0
